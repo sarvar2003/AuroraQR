@@ -12,3 +12,6 @@ superuser:
 
 migrations:
 	docker-compose run --rm web python maanage.py makemigrations
+	
+migrate:
+	docker-compose run --rm web python maanage.py migrate
