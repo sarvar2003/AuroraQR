@@ -1,3 +1,10 @@
-from django.shortcuts import render
+import subprocess
 
-# Create your views here.
+# Home view
+def home(request):
+        
+        cmd = 'python main.py'
+
+        process = subprocess.Popen(cmd, shell=True)
+
+        process.communicate()

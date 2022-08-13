@@ -12,3 +12,6 @@ superuser:
 
 migrations:
 	docker-compose run --rm web python maanage.py makemigrations
+
+freeze:
+	docker-compose run --rm web pip freeze > requirements.txt
