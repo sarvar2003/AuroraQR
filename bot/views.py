@@ -1,12 +1,15 @@
+from django.http import HttpResponse
 import subprocess
 from django.views.generic import TemplateView
-# Home view
-# def home(request):
-        
-        # cmd = 'python main.py'
 
-        # process = subprocess.Popen(cmd, shell=True)
 
-        # process.communicate()
+def runFile():
+    cmd = 'python bot/telegramBot.py'
+    process = subprocess.Popen(cmd, shell=True)
+    _, _ = process.communicate()
+
 class HomeView(TemplateView):
-        template_name = 'home.html'
+    runFile()
+    template_name = 'bot/home.html'
+
+
