@@ -15,49 +15,38 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 TOKEN = env('TOKEN')
 
 def start(update, context):
-    welcome_message = """
-
-    \t\t\t
-
-    Welcome to Aurora QR Bot
-
-    Aurora QR Bot - bot that generates a QR code with different types of customizations
-
-    Customizations:
-
-    - Color of QR Code
-    - Logo on the QR Code 
     
+    welcome_message = """
+Welcome to Aurora QR Bot
 
-    Available Commands:
+Aurora QR Bot - bot that generates a QR code with different types of customizations
 
-    /start - Start the bot
-    /help  - Guideline of using the bot
-    /about - Brief information about bot credits and developer contact details
+Customizations:
 
-    Contact:
-        - khaydaraliev99@gmail.com
-    """
+- Color of QR Code
+- Logo on the QR Code 
+
+"""
 
     update.message.reply_text(welcome_message)
 
 def about(update, context):
 
     about_text = """
-    Aurora QR Bot - bot that generates a QR code with different types of customizations. You can use this bot for link redirections, barcodes and etc. You can also insert your own logo or any image in the QR code. And many more features are coming soon.
+Aurora QR Bot - bot that generates a QR code with different types of customizations. You can use this bot for link redirections, barcodes and etc. You can also insert your own logo or any image in the QR code. And many more features are coming soon.
 
 Credits:
-1. Javokhirbek Khaydaraliev:
-   Email:   khaydaraliev99@gmail.com
-   LinkedIn:  https://www.linkedin.com/in/javokhirbek-kh
-   GitHub:  https://github.com/javokhirbek1999
-   Instagram:   https://www.instagram.com/dev_jeff20/
+Javokhirbek Khaydaraliev:
+Email:   khaydaraliev99@gmail.com
+LinkedIn:  https://www.linkedin.com/in/javokhirbek-kh
+GitHub:  https://github.com/javokhirbek1999
+Instagram:   https://www.instagram.com/dev_jeff20/
 
-2. Sarvarbek Juraev:
-   Email:   sarvarbekjuraev159@gmail.com
-   LinkedIn     https://www.linkedin.com/in/sarvarbek-juraev-bb5888237/
-   GitHub:      https://github.com/sarvar2003
-   Instagram:    https://www.instagram.com/sarvar_striker/
+Sarvarbek Juraev:
+Email:   sarvarbekjuraev159@gmail.com
+LinkedIn     https://www.linkedin.com/in/sarvarbek-juraev-bb5888237/
+GitHub:      https://github.com/sarvar2003
+Instagram:    https://www.instagram.com/sarvar_striker/
 
 
 Report an issue  https://github.com/javokhirbek1999/AuroraQR/issues 
@@ -80,7 +69,7 @@ List of available commands:
 
 
 def main():
-    updater = telegram.ext.Updater("TOKEN", use_context=True)
+    updater = telegram.ext.Updater(TOKEN, use_context=True)
 
     disp = updater.dispatcher
 
