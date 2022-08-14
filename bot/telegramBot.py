@@ -80,7 +80,7 @@ List of available commands:
 
 
 def main():
-    updater = telegram.ext.Updater("5508338510:AAHUc4tIS9edzMR_XD8gKP0rrzxKmA4LorU", use_context=True)
+    updater = telegram.ext.Updater("TOKEN", use_context=True)
 
     disp = updater.dispatcher
 
