@@ -1,8 +1,8 @@
 import threading
 from django.views.generic import TemplateView
 
-from .telegramBot import *
 
+from .telegramBot import *
 
 def setupBotThread():
     """

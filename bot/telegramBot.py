@@ -1,21 +1,18 @@
-import os
-import environ
-import telegram.ext
+from telegram import *
+from telegram.ext import *
+from requests import *
 
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# Available commands
+Start = "Start"
+Help = "Help"
+About = "About"
 
 
-TOKEN = env('TOKEN')
+def startCommand(update: Update, context: CallbackContext):
+    # Buttons that will appear when start command is called
+    buttons = [[KeyboardButton(Start)], [KeyboardButton(Help)], [KeyboardButton(About)]]
 
-def start(update, context):
-    
     username = update.message.chat.username
 
     welcome_message = f"""
@@ -30,9 +27,26 @@ Customizations:
 
 """
 
-    update.message.reply_text(welcome_message)
 
-def about(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=welcome_message, reply_markup = ReplyKeyboardMarkup(buttons))
+
+
+
+def helpCommand(update: Update, context: CallbackContext):
+
+    # Buttons that appear when help command is called
+    buttons = [[KeyboardButton(Start)], [KeyboardButton(About)]]
+
+    help_msg = """
+Using the bot is pretty simple
+""" 
+    
+    context.bot.send_message(chat_id=update.effective_chat.id, text=help_msg, reply_markup=ReplyKeyboardMarkup(buttons))
+
+
+
+
+def aboutCommand(update: Update, context: CallbackContext):
 
     about_text = """
 Aurora QR Bot - bot that generates a QR code with different types of customizations. You can use this bot for link redirections, barcodes and etc. You can also insert your own logo or any image in the QR code. And many more features are coming soon.
@@ -54,36 +68,29 @@ Instagram:    https://www.instagram.com/sarvar_striker/
 Report an issue  https://github.com/javokhirbek1999/AuroraQR/issues 
 
     """
-    update.message.reply_text(about_text)
 
-def help(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=about_text)
 
-    help_msg = """
-To learn more about the bot, please head over to /about
 
-List of available commands:
+def messageHandler(update: Update, context: CallbackContext):
 
-/start - start the bot
-/help  - guidelines of using the bot
-/about - brief info about the bot
-"""
-    update.message.reply_text(help_msg)
+    """
+    Dynamic message handler
+    """
+
+    if Start in update.message.text:
+        startCommand(update, context)
+    elif Help in update.message.text:
+        helpCommand(update, context)
+    elif About in update.message.text:
+        aboutCommand(update, context)
 
 
 def main():
-    updater = telegram.ext.Updater(TOKEN, use_context=True)
+    updater = Updater(token="5508338510:AAHUc4tIS9edzMR_XD8gKP0rrzxKmA4LorU")
+    dispatcher = updater.dispatcher
 
-    disp = updater.dispatcher
-
-
-    disp.add_handler(telegram.ext.CommandHandler("start", start))
-    disp.add_handler(telegram.ext.CommandHandler("about", about))
-    disp.add_handler(telegram.ext.CommandHandler("help", help))
-
+    dispatcher.add_handler(CommandHandler("start", startCommand))
+    dispatcher.add_handler(MessageHandler(Filters.text, messageHandler))
 
     updater.start_polling()
-    updater.idle()
-
-if __name__ == '__main__':
-    main()
-
