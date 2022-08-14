@@ -1,15 +1,21 @@
-from django.http import HttpResponse
-import subprocess
+import threading
 from django.views.generic import TemplateView
 
+from .telegramBot import *
 
-def runFile():
-    cmd = 'python bot/telegramBot.py'
-    process = subprocess.Popen(cmd, shell=True)
-    _, _ = process.communicate()
+
+def setupBotThread():
+    """
+    Setup the thread for running the bot in background 
+    """
+
+    botThread = threading.Thread(target=main)
+    
+    botThread.start()
+    
 
 class HomeView(TemplateView):
-    runFile()
+    setupBotThread()
     template_name = 'bot/home.html'
 
 

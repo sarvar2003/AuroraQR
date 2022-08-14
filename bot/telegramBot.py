@@ -16,8 +16,10 @@ TOKEN = env('TOKEN')
 
 def start(update, context):
     
-    welcome_message = """
-Welcome to Aurora QR Bot
+    username = update.message.chat.username
+
+    welcome_message = f"""
+Welcome to Aurora QR Bot, @{username}!
 
 Aurora QR Bot - bot that generates a QR code with different types of customizations
 
