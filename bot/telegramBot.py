@@ -2,16 +2,20 @@ from telegram import *
 from telegram.ext import *
 from requests import *
 
+import qrcode
+
 
 # Available commands
 Start = "Start"
 Help = "Help"
 About = "About"
-
+GenerateQR = "GenerateQR"
+Link = "Link"
+Data = "Data"
 
 def startCommand(update: Update, context: CallbackContext):
     # Buttons that will appear when start command is called
-    buttons = [[KeyboardButton(Start)], [KeyboardButton(Help)], [KeyboardButton(About)]]
+    buttons = [[KeyboardButton(Start), KeyboardButton(Help), KeyboardButton(About)],[KeyboardButton(GenerateQR)]]
 
     username = update.message.chat.username
 
@@ -35,7 +39,7 @@ Customizations:
 def helpCommand(update: Update, context: CallbackContext):
 
     # Buttons that appear when help command is called
-    buttons = [[KeyboardButton(Start)], [KeyboardButton(About)]]
+    buttons = [[KeyboardButton(GenerateQR)],[KeyboardButton(Start), KeyboardButton(About)]]
 
     help_msg = """
 Using the bot is pretty simple
@@ -72,6 +76,38 @@ Report an issue  https://github.com/javokhirbek1999/AuroraQR/issues
     context.bot.send_message(chat_id=update.effective_chat.id, text=about_text)
 
 
+def generateQR(update: Update, context: CallbackContext):
+
+    """
+    QR code generator Selection
+    """
+
+    # Buttons that appear when help command is called
+    buttons = [[KeyboardButton(Link), KeyboardButton(Data)], [KeyboardButton(Start)]]
+
+    linkOrData = "What data are you going to encode ?"
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=linkOrData, reply_markup=ReplyKeyboardMarkup(buttons))
+
+
+def generateQRData(update: Update, context: CallbackContext):
+
+    """
+    QR code generator for Data
+    """
+    pass
+
+
+
+def generateQRLink(update: Update, context: CallbackContext):
+
+    """
+    QR code generator for Links
+    """
+    pass
+
+
+
 def messageHandler(update: Update, context: CallbackContext):
 
     """
@@ -84,6 +120,12 @@ def messageHandler(update: Update, context: CallbackContext):
         helpCommand(update, context)
     elif About in update.message.text:
         aboutCommand(update, context)
+    elif GenerateQR in update.message.text:
+        generateQR(update, context)
+    elif Data in update.message.text:
+        generateQRData(update, context)
+    elif Link in update.message.text:
+        generateQRLink(update, context)
 
 
 def main():
