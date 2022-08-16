@@ -1,3 +1,6 @@
+import asyncio
+from curses import COLOR_GREEN, COLOR_RED
+from time import sleep
 from telegram import *
 from telegram.ext import *
 from requests import *
@@ -5,134 +8,161 @@ from requests import *
 import qrcode
 
 
-# Available commands
-Start = "Start"
-Help = "Help"
-About = "About"
-GenerateQR = "GenerateQR"
-Link = "Link"
-Data = "Data"
-
-def startCommand(update: Update, context: CallbackContext):
-    # Buttons that will appear when start command is called
-    buttons = [[KeyboardButton(Start), KeyboardButton(Help), KeyboardButton(About)],[KeyboardButton(GenerateQR)]]
-
-    username = update.message.chat.username
-
-    welcome_message = f"""
-Welcome to Aurora QR Bot, @{username}!
-
-Aurora QR Bot - bot that generates a QR code with different types of customizations
-
-Customizations:
-
-- Color of QR Code
-- Logo on the QR Code 
-
-"""
 
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=welcome_message, reply_markup = ReplyKeyboardMarkup(buttons))
+class AuroraBot:
+    def __init__(self) -> None:
+        self.data = ""
+        self.Start = "Start"
+        self.Help = "Help"
+        self.About = "About"
+        self.GenerateQR = "GenerateQR"
+        self.Data = None
 
+    def startCommand(self, update: Update, context: CallbackContext):
+        # Buttons that will appear when start command is called
 
+        self.Data = None
 
-def helpCommand(update: Update, context: CallbackContext):
+        buttons = [[KeyboardButton(self.Start), KeyboardButton(self.Help), KeyboardButton(self.About)],[KeyboardButton(self.GenerateQR)]]
 
-    # Buttons that appear when help command is called
-    buttons = [[KeyboardButton(GenerateQR)],[KeyboardButton(Start), KeyboardButton(About)]]
+        username = update.message.chat.username
 
-    help_msg = """
-Using the bot is pretty simple
-""" 
-    
-    context.bot.send_message(chat_id=update.effective_chat.id, text=help_msg, reply_markup=ReplyKeyboardMarkup(buttons))
+        welcome_message = f"""
+    Welcome to Aurora QR Bot, @{username}!
 
+    Aurora QR Bot - bot that generates a QR code with different types of customizations
 
+    Customizations:
 
-
-def aboutCommand(update: Update, context: CallbackContext):
-
-    about_text = """
-Aurora QR Bot - bot that generates a QR code with different types of customizations. You can use this bot for link redirections, barcodes and etc. You can also insert your own logo or any image in the QR code. And many more features are coming soon.
-
-Credits:
-Javokhirbek Khaydaraliev:
-Email:   khaydaraliev99@gmail.com
-LinkedIn:  https://www.linkedin.com/in/javokhirbek-kh
-GitHub:  https://github.com/javokhirbek1999
-Instagram:   https://www.instagram.com/dev_jeff20/
-
-Sarvarbek Juraev:
-Email:   sarvarbekjuraev159@gmail.com
-LinkedIn     https://www.linkedin.com/in/sarvarbek-juraev-bb5888237/
-GitHub:      https://github.com/sarvar2003
-Instagram:    https://www.instagram.com/sarvar_striker/
-
-
-Report an issue  https://github.com/javokhirbek1999/AuroraQR/issues 
+    - Color of QR Code
+    - Logo on the QR Code 
 
     """
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=about_text)
 
-
-def generateQR(update: Update, context: CallbackContext):
-
-    """
-    QR code generator Selection
-    """
-
-    # Buttons that appear when help command is called
-    buttons = [[KeyboardButton(Link), KeyboardButton(Data)], [KeyboardButton(Start)]]
-
-    linkOrData = "What data are you going to encode ?"
-
-    context.bot.send_message(chat_id=update.effective_chat.id, text=linkOrData, reply_markup=ReplyKeyboardMarkup(buttons))
-
-
-def generateQRData(update: Update, context: CallbackContext):
-
-    """
-    QR code generator for Data
-    """
-    pass
+        context.bot.send_message(chat_id=update.effective_chat.id, text=welcome_message, reply_markup = ReplyKeyboardMarkup(buttons))
 
 
 
-def generateQRLink(update: Update, context: CallbackContext):
+    def helpCommand(self, update: Update, context: CallbackContext):
 
-    """
-    QR code generator for Links
-    """
-    pass
+        # Buttons that appear when help command is called
+        buttons = [[KeyboardButton(self.GenerateQR)],[KeyboardButton(self.Start), KeyboardButton(self.About)]]
+
+        help_msg = """
+    Using the bot is pretty simple
+    """ 
+        
+        context.bot.send_message(chat_id=update.effective_chat.id, text=help_msg, reply_markup=ReplyKeyboardMarkup(buttons))
 
 
 
-def messageHandler(update: Update, context: CallbackContext):
 
-    """
-    Dynamic message handler
-    """
+    def aboutCommand(self, update: Update, context: CallbackContext):
 
-    if Start in update.message.text:
-        startCommand(update, context)
-    elif Help in update.message.text:
-        helpCommand(update, context)
-    elif About in update.message.text:
-        aboutCommand(update, context)
-    elif GenerateQR in update.message.text:
-        generateQR(update, context)
-    elif Data in update.message.text:
-        generateQRData(update, context)
-    elif Link in update.message.text:
-        generateQRLink(update, context)
+        about_text = """
+    Aurora QR Bot - bot that generates a QR code with different types of customizations. You can use this bot for link redirections, barcodes and etc. You can also insert your own logo or any image in the QR code. And many more features are coming soon.
 
+    Credits:
+    Javokhirbek Khaydaraliev:
+    Email:   khaydaraliev99@gmail.com
+    LinkedIn:  https://www.linkedin.com/in/javokhirbek-kh
+    GitHub:  https://github.com/javokhirbek1999
+    Instagram:   https://www.instagram.com/dev_jeff20/
+
+    Sarvarbek Juraev:
+    Email:   sarvarbekjuraev159@gmail.com
+    LinkedIn     https://www.linkedin.com/in/sarvarbek-juraev-bb5888237/
+    GitHub:      https://github.com/sarvar2003
+    Instagram:    https://www.instagram.com/sarvar_striker/
+
+
+    Report an issue  https://github.com/javokhirbek1999/AuroraQR/issues 
+
+        """
+
+        context.bot.send_message(chat_id=update.effective_chat.id, text=about_text)
+
+
+    def generateQR(self, update: Update, context: CallbackContext):
+
+        """
+        QR code generator Selection
+        """
+        # print(update.message.text)
+
+        if update.message.text == 'GenerateQR':
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Please enter data to encode (Link/Data): ")
+
+        data = update.message.text
+
+        if not self.Data and data != 'GenerateQR':
+            self.Data = data
+
+        if data == 'GenerateQR':
+            return
+        
+        if data != 'GenerateQR':
+            colors = {
+                '🟥': 'Red',
+                '🟧': 'Orange',
+                '🟨': 'Yellow',
+                '🟩': 'Green',
+                '🟦': 'Blue',
+                '🟫': 'Brown',
+                '⬛': 'Black',
+                '🟪': 'Purple',
+                '⬜': 'White'
+            }
+            color_buttons = [
+                    [KeyboardButton('🟥'),KeyboardButton('🟧'), KeyboardButton('🟨')],
+                    [KeyboardButton('🟩'), KeyboardButton('🟦'),KeyboardButton('🟫')],
+                    [KeyboardButton('⬛'), KeyboardButton('⬜'),KeyboardButton('🟪')]
+                ]
+        
+            context.bot.send_message(chat_id=update.effective_chat.id, text="Please choose the color of your QR code: ", reply_markup=ReplyKeyboardMarkup(color_buttons))
+            color = colors[update.message.text]
+
+        qr = qrcode.QRCode(version = 1, box_size = 10, border = 3)
+
+        print(f'THIS: {self.Data}')
+        qr.add_data(self.Data)
+
+        qr.make(fit=True)
+        
+        image = qr.make_image(fill_color=color, back_color='White')
+        image.save('YourQR.png')
+
+        context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('YourQR.png', 'rb'))
+        
+        # return 
+        
+
+    def messageHandler(self, update: Update, context: CallbackContext):
+
+        """
+        Dynamic message handler
+        """
+
+        if self.Start in update.message.text:
+            self.startCommand(update, context)
+        elif self.Help in update.message.text:
+            self.helpCommand(update, context)
+        elif self.About in update.message.text:
+            self.aboutCommand(update, context)
+        elif self.GenerateQR in update.message.text:
+            self.generateQR(update, context)
+            
 
 def main():
     updater = Updater(token="5508338510:AAHUc4tIS9edzMR_XD8gKP0rrzxKmA4LorU")
     dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("start", startCommand))
-    dispatcher.add_handler(MessageHandler(Filters.text, messageHandler))
+    bot = AuroraBot()
+
+    dispatcher.add_handler(CommandHandler("start", bot.startCommand))
+    dispatcher.add_handler(MessageHandler(Filters.text, bot.generateQR))
+    dispatcher.add_handler(MessageHandler(Filters.text, bot.messageHandler))
 
     updater.start_polling()
