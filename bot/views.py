@@ -16,6 +16,9 @@ def setupBotThread():
 
 class HomeView(TemplateView):
     setupBotThread()
-    template_name = 'bot/home.html'
+    template_name = 'Home/home.html'
+
+class HelpView(TemplateView):
+    template_name = 'Home/help.html'
 
 

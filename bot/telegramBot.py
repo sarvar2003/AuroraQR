@@ -90,7 +90,6 @@ class AuroraBot:
         """
         QR code generator Selection
         """
-        # print(update.message.text)
 
         if update.message.text == 'GenerateQR':
             context.bot.send_message(chat_id=update.effective_chat.id, text="Please enter data to encode (Link/Data): ")
@@ -126,7 +125,6 @@ class AuroraBot:
 
         qr = qrcode.QRCode(version = 1, box_size = 10, border = 3)
 
-        print(f'THIS: {self.Data}')
         qr.add_data(self.Data)
 
         qr.make(fit=True)

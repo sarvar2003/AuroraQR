@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-a3%627o=ae6z*#gg)dq-7z73-tn5wt+4)m$0hn2=4=)479k9+4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'aurora-qr.herokuapp.com']
 
 
 # Application definition
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'storages',
+
     'bot',
     
 
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,7 +129,44 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+
+STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+                                       # new
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'staticfiles'),                                        
+]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"      # new
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')                                      # new
+MEDIA_URL = '/media/'  
+
+
+# if 'AWS_STORAGE_BUCKET_NAME' in env:                                              # new
+#     AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+#     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#     AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+#     AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+#     AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+#     AWS_DEFAULT_ACL = 'public-read'
+#     AWS_S3_FILE_OVERWRITE = False
+
+#     MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+#     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+# if "DATABASE_URL" in env:
+#     DATABASES['default'] = env.db('DATABASE_URL')
+#     DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
