@@ -20,7 +20,7 @@ RUN addgroup --system django \
 
 COPY requirements.txt /code/
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt 
 
 COPY . .
 RUN mkdir staticfiles
